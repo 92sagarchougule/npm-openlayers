@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <title>Vector Clipping Layer</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- <style>
+      html, body {
+    margin: 0;
+    height: 100%;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+    }
+    </style> -->
+    <link rel="stylesheet" href="node_modules/ol/ol.css">
+    
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
+    <script src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
