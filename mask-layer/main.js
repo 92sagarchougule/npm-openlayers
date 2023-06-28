@@ -16,11 +16,12 @@ import { transform } from 'ol/proj';
 
 
 
+
 //A distinct className is required to use another canvas for the background
 
 const key = "8H3vz4wO6mZAX9q3EEdG"
 
-const background =new TileLayer({
+const background =new TileLayer({   
   className: 'ol-layer-imagery',
   source: new XYZ({
     //attributions:'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ',
@@ -30,6 +31,18 @@ const background =new TileLayer({
   }),
 });
 
+  const geoVector = new VectorLayer({     // to clip layer
+    style: null,
+    source: new VectorSource({
+      url: 'http://localhost:8081/geoserver/local/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=local%3ATaluka&maxFeatures=50&outputFormat=application%2Fjson',
+      format: new GeoJSON(),
+      crossOrigin: 'anonymous'
+    }),
+  });
+
+
+//http://localhost:8081/geoserver/local/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=local%3ATaluka&maxFeatures=50&outputFormat=application%2Fjson
+
 
 // const background = new TileLayer({
 //   className: 'stamen',
@@ -38,11 +51,15 @@ const background =new TileLayer({
 //   }),
 // });
 
+// geojson layer service from local server
+
+
+
 const base = new TileLayer({
   source: new OSM(),
 });
 
-const clipLayer = new VectorLayer({
+const clipLayer = new VectorLayer({     // to clip layer
   style: null,
   source: new VectorSource({
     url: './data/map.geojson',
@@ -52,14 +69,16 @@ const clipLayer = new VectorLayer({
 
 //Giving the clipped layer an extent is necessary to avoid rendering when the feature is outside the viewport
 clipLayer.getSource().on('addfeature', function () {
-  background.setExtent(clipLayer.getSource().getExtent());
+  background.setExtent(clipLayer.getSource().getExtent());   //
 });
+
 
 const style = new Style({
   fill: new Fill({
     color: 'black',
   }),
 });
+
 
 background.on('postrender', function (e) {
   const vectorContext = getVectorContext(e);
@@ -70,8 +89,9 @@ background.on('postrender', function (e) {
   e.context.globalCompositeOperation = 'source-over';
 });
 
+
 const map = new Map({
-  layers: [ base, background, clipLayer], //background,
+  layers: [base, geoVector, background, clipLayer], //background,  
   target: 'map',
   view: new View({
     center: fromLonLat([75.4924070208232, 19.631953861800696]),
