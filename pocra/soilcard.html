@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="description" content="Responsive Admin Template" />
+    <meta name="author" content="SmartUniversity" />
+    <title>PoCRA Gis</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
+    <link href="assets/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="fonts/material-design-icons/material-icon.css" rel="stylesheet" type="text/css" />
+    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/plugins/summernote/summernote.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/plugins/material/material.min.css">
+    <link rel="stylesheet" href="assets/css/material_style.css">
+    <link href="assets/css/pages/animate_page.css" rel="stylesheet">
+    <link href="assets/css/pages/inbox.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/theme-color.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="css/ol.css">
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/ol3-layerswitcher.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .pagination {
+            display: inline-block;
+            font-size: 8px;
+        }
+        
+        .shctable {
+            width: 100%;
+            font-size: 10px;
+            border: 1px solid black;
+        }
+        
+        .shcheader {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            background-color: #eba834
+        }
+        
+        .shctblheader {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            background-color: #ffdd00;
+        }
+        
+        .shcfarmertd {
+            text-align: left;
+            font-size: 12px;
+            background-color: #e6e5df;
+        }
+        
+        .shcth {
+            text-align: left;
+            font-size: 12px;
+            background-color: #85c505;
+        }
+        
+        #wms_layers_btn {
+            position: absolute;
+            z-index: 500;
+            top: 12%;
+            left: 1%;
+        }
+        
+        #wms_layers_btn1 {
+            position: absolute;
+            z-index: 500;
+            top: 12%;
+            right: 1%;
+        }
+        
+        .box {
+            width: 10%;
+            height: 100%;
+            position: absolute;
+            top: 80%;
+            right: 1%;
+            opacity: 1;
+            /* for demo purpose  */
+        }
+        
+        .formbox {
+            width: 80%;
+            height: 10%;
+            position: absolute;
+            top: 1%;
+            /* right: 1%; */
+            /* opacity: 1; */
+            /* for demo purpose  */
+        }
+        
+        .stack-top {
+            z-index: 9;
+            margin: 0.5%;
+            /* right: 1%; */
+            /* for demo purpose  */
+        }
+        /* The Modal (background) */
+        
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            /* width: 100%; Full width */
+            /* height: 100%; Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            /* background-color: rgb(0,0,0); Fallback color */
+            /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
+        }
+        /* Modal Content/Box */
+        
+        .modal-content {
+            /* background-color: #fefefe; */
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 35%;
+            /* Could be more or less, depending on screen size */
+        }
+        /* The Close Button */
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+        
+        .active,
+        .collapsible:hover {
+            background-color: #555;
+        }
+        
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+        
+        .active:after {
+            content: "\2212";
+        }
+        
+        .content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #f1f1f1;
+            /*               max-height: 130px; */
+        }
+        
+        #layertree li>span {
+            cursor: pointer;
+        }
+        
+        .header-grid {
+            grid-area: header_grid;
+            align-self: stretch;
+            justify-self: stretch;
+            /*background: linear-gradient(to right, rgb(100, 100, 100), rgb(125, 110, 40), rgb(125, 240, 150), rgb(200, 150, 100), rgb(200, 200, 255));*/
+            /*background: linear-gradient(5deg, rgb(100, 100, 100) 20%, rgb(125, 110, 40) 30%, rgb(97, 232, 127), rgb(247, 244, 82),aliceblue 70%, rgb(166, 166, 244));*/
+            /*background: linear-gradient(3deg, rgb(100, 100, 100) 20%, rgb(125, 110, 40) 30%, rgb(97, 232, 127) 45%, rgb(247, 244, 82), 50%, aliceblue, 75%, rgb(166, 166, 244));*/
+            /*background: linear-gradient(3deg, rgb(100, 100, 100) 20%, rgb(125, 110, 40) 30%, rgb(97, 232, 127) 45%, rgb(247, 244, 182), 50%, rgb(166, 166, 255), 80%, rgb(255, 255, 150), 90%, rgb(255, 255, 255));*/
+            /*background: linear-gradient(3deg, rgb(100, 100, 100) 20%, rgb(125, 110, 40) 30%, rgb(97, 232, 127) 45%, rgb(247, 244, 182), 50%, rgb(166, 166, 255) 60%, 78%, rgb(255, 255, 175), 94%, rgb(255, 255, 255) 97%);*/
+            /*background: rgb(175, 175, 175);*/
+            background: rgb(0, 150, 150);
+            /*border: 1px solid #00ddaa;*/
+            display: grid;
+            grid-template-columns: 100px 4fr;
+            /* 4fr 1fr;*/
+            grid-template-areas: "logo_grid title_grid";
+            /* site_search_grid login_button_grid";*/
+        }
+        
+        #logo-grid {
+            grid-area: logo_grid;
+            align-self: stretch;
+            justify-self: stretch;
+            align-content: center;
+            justify-content: center;
+            display: grid;
+            grid-template-areas: "logo";
+            /*background: rgb(200, 200, 200);*/
+        }
+        
+        #logo {
+            grid-area: logo;
+            margin: 0;
+            font-family: serif;
+            font-weight: bold;
+            /*font-color: rgba(255, 0, 0, 0);*/
+        }
+        
+        #title-grid {
+            grid-area: title_grid;
+            align-self: stretch;
+            justify-self: stretch;
+            justify-content: left;
+            align-content: left;
+            display: grid;
+            grid-template-areas: "title";
+        }
+        
+        #title {
+            grid-area: title;
+            margin: 0;
+            font-family: serif;
+            font-weight: bold;
+            /*color: rgba(0, 0, 0, 1);*/
+            /*font-weight: normal;*/
+            /*color: rgba(175, 195, 225);*/
+            color: rgba(255, 255, 255);
+            text-shadow: 0 0 3px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
+        }
+        
+        #site-search-grid {
+            grid-area: site_search_grid;
+            align-self: stretch;
+            justify-self: stretch;
+            height: 100%;
+            display: grid;
+            grid-template-areas: "site_search_input";
+        }
+        
+        #site-search-input {
+            grid-area: site_search_input;
+            width: 100%;
+            height: 100%;
+            border-bottom: 2px solid;
+            background-color: rgba(255, 255, 255, 1);
+            /*border: 0px;*/
+            box-sizing: border-box;
+        }
+        
+        #login-button-grid {
+            grid-area: login_button_grid;
+            align-self: stretch;
+            justify-self: stretch;
+            display: grid;
+            grid-template-areas: 'login_button_text';
+        }
+        
+        #login-button-text {
+            grid-area: login_button_text;
+            align-self: center;
+            justify-self: center;
+            font-size: 1.25em;
+        }
+        
+        #login-button-grid:hover {
+            cursor: pointer;
+            background-color: rgba(0, 0, 255, 0.15);
+        }
+        
+        .ol-legend {
+            background: rgb(224, 245, 245);
+        }
+        
+        .ol-legend:hover {
+            background: rgb(226, 223, 223);
+        }
+    </style>
+
+    <style>
+        /* popup style */
+        
+        .ol-popup {
+            max-width: 300px;
+            min-width: 100px;
+            min-height: 1em;
+        }
+        /* Image on popup */
+        
+        .ol-popup img {
+            float: left;
+            margin: 0 0.5em 0 0;
+            max-width: 100px;
+            max-height: 100px;
+        }
+        /* no image content tooltips */
+        
+        .ol-popup.tooltips img {
+            display: none;
+        }
+        /* Custom orange style (tips) */
+        
+        .ol-popup.tips.orange {
+            border-color: #da7;
+            background-color: #eca;
+        }
+        
+        .ol-popup.tips.orange .anchor::before {
+            border-color: #da7 transparent;
+        }
+        
+        .ol-popup-middle.tips.orange .anchor::before {
+            border-color: transparent #da7;
+        }
+        /* orange style (default) */
+        
+        .ol-popup.default.orange {
+            border: 4px solid #f96;
+        }
+        
+        .ol-popup.default.orange .anchor {
+            margin: -15px 18px;
+        }
+        
+        .ol-popup.default.orange .anchor::after {
+            margin: 6px
+            /*border:4 +2 px */
+            -9px;
+        }
+        
+        .ol-popup-middle.default.orange .anchor::after {
+            margin: -9px 6px
+            /*border:4 +2 px */
+            ;
+        }
+        
+        .ol-popup.default.orange .anchor::before {
+            border-color: #f96 transparent;
+        }
+        
+        .ol-popup-middle.default.orange .anchor::before {
+            border-color: transparent #da7;
+        }
+        
+        .ol-popup.default.orange .closeBox {
+            background-color: rgba(255, 153, 102, 0.7);
+        }
+        
+        .ol-popup.default.orange .closeBox:hover {
+            background-color: rgba(255, 153, 102, 1);
+        }
+        
+        .modal {
+            overflow: hidden;
+        }
+        
+        .modal-dialog {
+            height: 300px;
+        }
+        
+        .modal-header {
+            height: 30px;
+            padding: 20px;
+            background-color: #18456b;
+            color: white;
+        }
+        
+        .modal-title {
+            margin-top: -10px;
+            font-size: 16px;
+        }
+        
+        .modal-header .close {
+            margin-top: -10px;
+            color: #fff;
+        }
+        
+        .modal-body {
+            color: #888;
+            padding: 5px 35px 20px;
+        }
+        
+        .modal-body h3 {
+            text-align: center;
+        }
+        
+        .modal-body p {
+            padding-top: 10px;
+            font-size: 1.1em;
+        }
+        
+        #shcfarmerdetails table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+        
+        .ajax-loader {
+            visibility: hidden;
+            background-color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            z-index: +100 !important;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ajax-loader img {
+            position: relative;
+            top: 50%;
+            left: 50%;
+        }
+        
+        .desk {
+            display: block;
+        }
+        
+        .div-only-mobile {
+            display: none;
+        }
+        
+        .locbutton {
+            position: absolute;
+            z-index: 9;
+            /* background-color: #f1f1f1; */
+            /* text-align: center; */
+            /* border: 1px solid #d3d3d3; */
+            right: 1%;
+            /* width: 100%; */
+            top: 22%;
+        }
+        
+        @media screen and (max-width: 1000px) {
+            .div-only-mobile {
+                display: none;
+            }
+        }
+        
+        @media screen and (max-width: 700px) {
+            .desk {
+                display: none;
+            }
+            .div-only-mobile {
+                display: block;
+            }
+            .map {
+                height: 50vh
+            }
+            .locbutton {
+                position: absolute;
+                z-index: 9;
+                /* background-color: #f1f1f1; */
+                /* text-align: center; */
+                /* border: 1px solid #d3d3d3; */
+                right: 0.7%;
+                /* width: 100%; */
+                top: 20%;
+            }
+        }
+    </style>
+
+
+
+    <link rel="stylesheet" href="olcss/fontmaki.css" />
+
+
+
+    <link rel="stylesheet" href="olcss/fontmaki2.css" />
+
+
+    <!-- ol-ext -->
+    <script src='libs/v6.0.0-dist/ol.js'></script>
+    <link rel="stylesheet" href="olcss/ol-ext.css" />
+    <script type="text/javascript" src="js/ol-ext.js"></script>
+    <script type="text/javascript" src="olcss/ol-ext.js"></script>
+    <!-- ol-ext maki and fontawesome defintions used in fontsymbol -->
+    <script type="text/javascript" src="olcss/FontAwesomeDef.js"></script>
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,URL,TextDecoder"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script> -->
+
+    <style>
+        .ol-overlay.menu {
+            width: 20%;
+            background: whitesmoke;
+            color: #333;
+            box-shadow: 0px 0px 5px #000;
+            padding: 0.5em;
+            -webkit-transition: all 0.25s;
+            transition: all 0.25s;
+            display: block;
+            height: max-content;
+        }
+        /* style the close box */
+        
+        .ol-overlay.menu .ol-closebox {
+            color: #369;
+            left: 1em;
+            top: 0.5em;
+        }
+        
+        .ol-overlay.menu .ol-closebox:before {
+            content: "\f0c9";
+            font-family: FontAwesome;
+        }
+        
+        #menu {
+            padding-top: 1.5em;
+            font-size: 0.9em;
+        }
+        /* menu button */
+        
+        .ol-control.menu {
+            top: 0.5em;
+            left: 0.5em;
+        }
+        
+        .ol-control.menu i {
+            color: #fff;
+        }
+        
+        .ol-zoom {
+            left: auto;
+            right: 0.5em;
+        }
+        
+        .ol-rotate {
+            right: 3em;
+        }
+        
+        .ol-touch .ol-rotate {
+            right: 3.5em;
+        }
+        /**/
+        
+        .ol-overlay img {
+            max-width: 90%;
+        }
+        
+        .data,
+        .data p {
+            margin: 0;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .ol-legend>canvas {
+            float: right;
+        }
+        
+        .ol-legend>div.ol-legend {
+            position: relative;
+        }
+    </style>
+
+
+
+    <style>
+        .mydiv {
+            position: absolute;
+            z-index: 9;
+            background-color: #f1f1f1;
+            /* text-align: center; */
+            border: 1px solid #d3d3d3;
+            right: 3%;
+            width: 30%;
+            top: 10%;
+        }
+        
+        .mydivmobile {
+            /* position: absolute; */
+            /* z-index: 9; */
+            background-color: #f1f1f1;
+            /* text-align: center; */
+            border: 1px solid #d3d3d3;
+            /* right: 3%;/ */
+            width: 98%;
+            margin-left: 2%;
+            margin-right: 2%;
+            /* top: 60%; */
+        }
+        
+        .mydiv1 {
+            font-family: monospace;
+            position: absolute;
+            z-index: 9;
+            background-color: #f1f1f1;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+            right: 3%;
+            width: 30%;
+            top: 4%;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .mydivheader {
+            padding: 10px;
+            cursor: move;
+            z-index: 10;
+            background-color: rgb(0, 150, 150);
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .mydivheadermobile {
+            padding: 1px;
+            cursor: move;
+            /* z-index: 10; */
+            background-color: rgb(0, 150, 150);
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 12px;
+            height: 20px;
+        }
+    </style>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/dragable.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        @media screen and (max-width: 700px) {
+            #title {
+                font-size: 18px !important;
+            }
+            #title-grid {
+                margin: 1% 30%;
+                position: absolute;
+                top: 12px;
+            }
+            .logo-default {
+                display: none;
+            }
+        }
+        
+        .myheader {
+            position: absolute;
+            background: green;
+            left: 0px;
+            width: 100%;
+            height: 65px;
+            z-index: 1;
+            top: 0;
+        }
+        
+        .proTitle {
+            font-size: 2em;
+        }
+    </style>
+</head>
+
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white sidemenu-closed dark-sidebar-color logo-dark">
+    <div class="page-wrapper">
+        <div class="page-header navbar navbar-fixed-top" style="background-color: rgb(0, 150, 150);">
+            <div class="page-header-inner">
+                <div class="page-logo" style="background-color: rgb(0, 150, 150);">
+                    <a href="index.html">
+                        <img alt="" src="./images/pocra.png" height="50" width="50">
+                        <span class="logo-default" style="color: white;">PoCRA</span> </a>
+                </div>
+                <ul class="nav navbar-nav navbar-left in">
+                    <li><a href="#" class="menu-toggler sidebar-toggler"><i class="icon-menu"></i></a></li>
+                </ul>
+                <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span></span>
+                </a>
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown dropdown-quick-sidebar-toggler">
+                            <img src="https://mahapocra.gov.in/assets/images/emblum.png" style=" float: right;height: 55px;width: 55px; ">
+                            <img src="https://mahapocra.gov.in/assets/images/logo.png" style=" float: right;height: 55px;width: 55px;">
+                        </li>
+                    </ul>
+                </div>
+                <div id="title-grid" style="margin-top: 1%;">
+                    <h1 id="title">नानाजी देशमुख कृषि संजीवनी प्रकल्प</h1>
+                </div>
+            </div>
+        </div>
+        <div class="page-container" style="background-color: rgb(0, 150, 150);">
+
+
+
+            <!-- start sidebar menu -->
+            <div class="sidebar-container">
+                <div class="sidemenu-container navbar-collapse collapse fixed-menu" style="background-color: rgb(0, 150, 150);">
+                    <div id="remove-scroll" class="dbt_point" onload="show_sub()">
+                        <ul class="sidemenu  page-header-fixed sidemenu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                            <li class="nav-item">
+                                <a href="http://gis.mahapocra.gov.in/dashboard_handover/" target="_blank" class="nav-link nav-toggle">
+                                    <i class="material-icons">ac_unit</i>
+                                    <span class="title" style="color: white;">जीआयएस डॅशबोर्ड </span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="soilcard.html" class="nav-link nav-toggle">
+                                    <i class="material-icons">assignment</i>
+                                    <span class="title" style="color: white;">मृदा आरोग्य पत्रिका </span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="map.html" class="nav-link nav-toggle">
+                                    <i class="material-icons">public</i>
+                                    <span class="title" style="color: white;">माझे गाव माझा नकाशा </span>
+                                    <!-- <span class="arrow "></span> -->
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forecast.html" class="nav-link nav-toggle">
+                                    <i class="material-icons">ac_unit</i>
+                                    <span class="title" style="color: white;">हवामान अंदाज </span>
+                                    <!-- <span class="arrow "></span> -->
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- end sidebar menu -->
+
+
+            
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="row">
+                        <div id="content" class="desk" style="width:100%; height:85vh;overflow: auto;">
+                            <div class="container formbox stack-top desk" id="container">
+                                <!-- <h4>Soil Health Card d</h4> -->
+                                <form class="form-inline">
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+                                        <!-- <label for="sel1">District:</label> -->
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="district" onchange="getTaluka(this.value)">
+                      <option value="-1">--जिल्हा निवडा--</option>
+                    </select>
+                                    </div>
+                                    <!-- <div class="form-group" style="padding-left: 1%;">
+                    <label for="sel1"> Subdivision:</label>
+                    <select class="form-control" style="height: 0%;" id="division" onchange="getTaluka(this.value)">
+                      <option value="-1">--Select Subdivision--</option>
+                    </select>
+                 </div> -->
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+                                        <!-- <label for="sel1"> Taluka:</label> -->
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="taluka" onchange="getVillage(this.value)">
+                      <option value="-1">--तालुका निवडा--</option>
+                    </select>
+                                    </div>
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+                                        <!-- <label for="sel1">Village:</label> -->
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="village" onchange="getVillageData(this.value)">
+                      <option value="-1">--गाव निवडा--</option>
+                    </select>
+                                    </div>
+                                    <div class="form-group" style="padding-left: 2%;margin-top: 2%;">
+                                        <!-- <label for="sel1"></label> -->
+                                        <button type="button" style="margin-left: 4%; font-size: 12px;" class="btn btn-primary" onclick="loadshcDetails();addCadastrallayer();">पहा</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="width:100%;height:85vh;margin-top: 0%;" id="map" class="map">
+                            </div>
+
+                            <div class="mydiv1" id="mydiv">
+                                <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+                                <div class="mydivheader" id="mydivheader" style="font-family:Verdana;">मृदा आरोग्य पत्रिका</div>
+                            </div>
+
+                            <div id="mydivatt" class="mydiv" style="display: none;height: 400px;">
+                                <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+                                <div id="mydivattheader" class="mydivheader unselectable">
+                                    <div>
+                                        <span id="atttitle" style="color: white;text-align: center;font-weight: bold;">मृदा आरोग्य पत्रिका शेतकऱ्यांची  यादी</span>
+                                        <span id="tabevent" class="close" style="opacity: 0.9;">
+                      <!--<img src="/mahaURJA/resources/images/oc.png" onclick="ToggleDragable();" style="width: 15px;" />-->
+                      <img src="images/cancle.png" title="close window"
+                       onclick="closediv('mydivatt');opendiv('farmerbutton')"
+                       style="width: 15px;margin-left: 5px;opacity: 1;" />
+                    </span>
+                                    </div>
+                                </div>
+                                <!--                <div  id="attcontainer" style="overflow: scroll;background-color: #ffffffe0;border: thin solid #2196f3;height: 500px;width: 270px;">-->
+
+
+
+                                <!-- <div style="height: 100%;overflow: auto;text-align: left;width: 100%;"> -->
+
+
+
+                                <!------------------------------------------------------------>
+                                <div style="height: 8%; ;background-color: #369;text-align: left;">
+                                    <label style="color: white;padding-top: 1%;margin-left: 2%; ">जिल्हा :</label>
+                                    <label style="color:white;padding-top: 1%;" id="districtlabel"></label>
+                                    <label style="color:white;padding-top: 1%;margin-left: 2%;">तालुका :</label>
+                                    <label style="color:white;padding-top: 1%;" id="talukalabel"></label>
+                                    <label style="color:white;padding-top: 1%;margin-left: 2%;">गाव :</label>
+                                    <label style="color:white;padding-top: 1%;" id="villagelabel"> :</label>
+                                </div>
+                                <div style="background-color: transparent;overflow-x: auto;overflow-y: auto;width: 100%;height: 85%; font-size: 10px;margin-top: 1%;" id="ptTable">
+                                </div>
+                                <!------------------------------------------------------------>
+
+
+
+
+
+                                <!-- </div> -->
+
+
+
+                            </div>
+                            <div id="mydiva" class="mydiv desk" style="display: none;height: 400px;">
+                                <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+                                <div id="mydivaheader" class="mydivheader unselectable ">
+                                    <div>
+                                        <span id="atttitle" style="color: white;text-align: center;font-weight: bold;">मृदा आरोग्य पत्रिका</span>
+                                        <span id="tabevent" class="close" style="opacity: 0.9;">
+                      <img class="close" src="images/cancle.png" title="close"
+                        onclick="closediv('mydiva');opendiv('mydivatt')"
+                        style="width: 15px;margin-left: 5px;opacity: 1;" />
+                    </span>
+                                        <img class="close" src="images/printer.png" id="create_pdf" title="print" onclick="printshc();closediv('mydiva');opendiv('mydivatt')" style="width: 15px;height: 15px;margin-left: 5px;opacity: 1;" />
+                                    </div>
+                                </div>
+                                <!--                <div  id="attcontainer" style="overflow: scroll;background-color: #ffffffe0;border: thin solid #2196f3;height: 500px;width: 270px;">-->
+                                <div style="height: 85%;overflow: auto;text-align: left;width: 100%;" id="shcfarmerdetails">
+                                    <!------------------------------------------------------------>
+
+                                    <!------------------------------------------------------------>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="locbutton" id="locbutton"><img src="images/loc.png"></a>
+                        <div id="wait" style="display:none;width:100px;height:100px;border:1px solid black;position:absolute;top:40%;left:50%;padding:2px;"><img src='images/loader.gif' width="80" height="80" /><br>Loading..</div>
+                        <div id="contentm" class="div-only-mobile" style="width:100%; height:60vh;overflow: auto;">
+                            <div class="container formbox stack-top div-only-mobile " style="top:5%" id="containerm">
+
+
+
+                                <!-- <h4>Soil Health Card m</h4> -->
+
+
+
+                                <form class="form-inline">
+
+
+
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+
+
+
+                                        <!-- <label for="sel1">District:</label> -->
+
+
+
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="districtm" onchange="getTalukam(this.value)">
+
+
+
+                      <option value="-1">--जिल्हा निवडा--</option>
+
+
+
+                    </select>
+
+
+
+                                    </div>
+
+
+
+                                    <!-- <div class="form-group" style="padding-left: 1%;">
+
+
+
+                    <label for="sel1"> Subdivision:</label>
+
+
+
+                    <select class="form-control" style="height: 0%;" id="division" onchange="getTaluka(this.value)">
+
+
+
+                      <option value="-1">--Select Subdivision--</option>
+
+
+
+                    </select>
+
+
+
+                  </div> -->
+
+
+
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+
+
+
+                                        <!-- <label for="sel1"> Taluka:</label> -->
+
+
+
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="talukam" onchange="getVillagem(this.value)">
+
+
+
+                      <option value="-1">--तालुका निवडा--</option>
+
+
+
+                    </select>
+
+
+
+                                    </div>
+
+
+
+                                    <div class="form-group" style="padding-left: 1%;margin-top: 2%;">
+
+
+
+                                        <!-- <label for="sel1">Village:</label> -->
+
+
+
+                                        <select class="form-control" style="height: 0%;color: lightslategray;" id="villagem">
+
+
+
+                      <option value="-1">--गाव निवडा--</option>
+
+
+
+                    </select>
+
+
+
+                                    </div>
+
+
+
+                                    <div class="form-group" style="padding-left: 2%;margin-top: 2%;">
+
+
+
+                                        <!-- <label for="sel1"></label> -->
+
+
+
+                                        <button type="button" style="margin-left: 4%; font-size: 12px;" class="btn btn-primary" onclick="loadshcDetailsm();addCadastrallayerm();">पहा</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+                                </form>
+
+
+
+                            </div>
+
+
+
+
+
+
+
+                            <div style="width:100%;height:50vh;margin-top: 0%;" id="mapm" class="map">
+
+
+
+                            </div>
+
+
+
+                            <div class="mydiv1" id="mydivmo" style="right: 10%;width: 25%;top:16%;">
+
+
+
+                                <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+
+
+
+                                <div class="mydivheader" id="mydivmoheader" style="font-family:Verdana;font-size: 10px;">मृदा आरोग्य पत्रिका</div>
+
+
+
+                            </div>
+
+
+
+                            <div id="mydivattm" class="mydivmobile div-only-mobile" style="height: 300px;display: none;">
+
+
+
+
+
+
+
+                                <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+
+
+                                <div id="mydivattmheader" class="mydivheadermobile unselectable">
+
+
+
+                                    <div>
+
+
+
+                                        <span id="atttitle" style="color: white;text-align: center;font-weight: bold;font-size: 12px;">मृदा आरोग्य पत्रिका शेतकऱ्यांची  यादी</span>
+
+
+
+                                        <span id="tabevent" class="close" style="opacity: 0.9;">
+
+
+
+                        <!--<img src="/mahaURJA/resources/images/oc.png" onclick="ToggleDragable();" style="width: 15px;" />-->
+
+
+
+                        <img src="images/cancle.png" title="close window" onclick="closediv('mydivattm');"
+
+
+
+                          style="width: 15px;height: 15px;margin-left: 5px;opacity: 1;" />
+
+
+
+                      </span>
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                                <!--                <div  id="attcontainer" style="overflow: scroll;background-color: #ffffffe0;border: thin solid #2196f3;height: 500px;width: 270px;">-->
+
+
+
+                                <!-- <div style="height: 100%;overflow: auto;text-align: left;width: 100%;"> -->
+
+
+
+                                <!------------------------------------------------------------>
+
+
+
+                                <div style="background-color: #369;text-align: left;font-size: 12px;">
+
+
+
+
+
+
+
+                                    <label style="color: white;padding-top: 1%;margin-left: 2%; ">जिल्हा :</label>
+
+
+
+                                    <label style="color:white;padding-top: 1%;" id="districtlabelm"></label>
+
+
+
+                                    <label style="color:white;padding-top: 1%;margin-left: 2%;">तालुका :</label>
+
+
+
+                                    <label style="color:white;padding-top: 1%;" id="talukalabelm"></label>
+
+
+
+                                    <label style="color:white;padding-top: 1%;margin-left: 2%;">गाव :</label>
+
+
+
+                                    <label style="color:white;padding-top: 1%;" id="villagelabelm"> </label>
+
+
+
+                                </div>
+
+
+
+                                <div style="background-color: transparent;overflow-x: auto;overflow-y: auto;width: 100%;height: 85%; font-size: 10px;margin-top: 1%;" id="ptTablem">
+
+
+
+                                </div>
+
+
+
+                                <!------------------------------------------------------------>
+
+
+
+
+
+
+
+                                <!-- </div> -->
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div id="mydivam" class="mydivmobile" style="display: none;height: 300px;">
+
+
+
+                                <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+
+
+                                <div id="mydivamheader" class="mydivheadermobile unselectable ">
+
+
+
+                                    <div>
+
+
+
+                                        <span id="atttitle" style="color: white;text-align: center;font-weight: bold;">मृदा आरोग्य पत्रिका</span>
+
+
+
+                                        <span id="tabevent" class="close" style="opacity: 0.9;">
+
+
+
+
+
+
+
+                      <img class="close" src="images/cancle.png" title="close"
+
+
+
+                        onclick="closediv('mydivam');opendiv('mydivattm')"
+
+
+
+                        style="width: 15px;height: 15px;margin-left: 2%;opacity: 1;" />
+
+
+
+                    </span>
+
+
+
+                                        <img class="close" src="images/printer.png" id="create_pdf" title="print" onclick="printshcm();closediv('mydivam');opendiv('mydivattm')" style="width: 15px;height: 15px;margin-left: 2%;opacity: 1;" />
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                                <!--                <div  id="attcontainer" style="overflow: scroll;background-color: #ffffffe0;border: thin solid #2196f3;height: 500px;width: 270px;">-->
+
+
+
+                                <div style="height: 85%;overflow: auto;text-align: left;width: 100%;" id="shcfarmerdetailsm">
+
+
+
+                                    <!------------------------------------------------------------>
+
+
+
+
+
+
+
+
+
+
+
+                                    <!------------------------------------------------------------>
+
+
+
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <!-- end page content -->
+
+
+
+            <!-- start chat sidebar -->
+
+
+
+            <div class="chat-sidebar-container" data-close-on-body-click="false">
+
+
+
+                <div class="chat-sidebar">
+
+
+
+                    <ul class="nav nav-tabs">
+
+
+
+                        <li class="nav-item">
+
+
+
+                            <a href="#quick_sidebar_tab_1" class="nav-link active tab-icon" data-toggle="tab"> <i class="icon-settings"></i>Tools
+
+
+
+                                <!--                                    <span class="badge badge-danger"></span>-->
+
+
+
+                            </a>
+
+
+
+                        </li>
+
+
+
+                        <!--                            <li class="nav-item">
+
+
+
+                                    <a href="#quick_sidebar_tab_3" class="nav-link tab-icon"  data-toggle="tab"> <i class="material-icons">settings</i> Search
+
+
+
+                                    </a>
+
+
+
+                                </li>-->
+
+
+
+                    </ul>
+
+
+
+                    <div class="tab-content">
+
+
+
+                        <!-- Start User Chat -->
+
+
+
+                        <div class="tab-pane active chat-sidebar-chat in active show animated slideInRight" role="tabpanel" id="quick_sidebar_tab_1">
+
+
+
+                            <div class="chat-sidebar-list">
+
+
+
+                                <div class="chat-sidebar-chat-users slimscroll-style" data-rail-color="#ddd" data-wrapper-class="chat-sidebar-list">
+
+
+
+                                    <div class="chat-header" hidden="">
+
+
+
+                                        <h5 class="list-heading">BUFFER</h5>
+
+
+
+                                    </div>
+
+
+
+                                    <ul class="media-list list-items">
+
+
+
+                                        <li class="media"><img class="media-object" src="images/buffer.png" width="35" height="35" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Buffer</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                        <li class="media">
+
+
+
+                                            <div class="media-status">
+
+
+
+                                            </div> <img class="media-object" src="images/meas.png" width="40" height="40" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Measurement</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                        <li class="media"><img class="media-object" src="images/bookmark.png" width="35" height="35" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Bookmarks</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                        <li class="media">
+
+
+
+                                            <div class="media-status">
+
+
+
+                                            </div> <img class="media-object" src="images/identify.png" width="35" height="35" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Identify</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                        <li class="media"><img class="media-object" src="images/Query.png" width="35" height="35" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Query Builder</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>position: absolute; z-index: 500; top: 12%; left: 1%;
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                        <li class="media"><img class="media-object" src="images/draw.png" width="35" height="35" alt="...">
+
+
+
+                                            <div class="media-body">
+
+
+
+                                                <h5 class="media-heading" style="padding-top: 10px;font-weight: bold">
+
+
+
+                                                    Draw</h5>
+
+
+
+                                                <div class="media-heading-sub"></div>
+
+
+
+                                            </div>
+
+
+
+                                        </li>
+
+
+
+                                    </ul>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            <div class="chat-sidebar-item">
+
+
+
+                                <div class="chat-sidebar-chat-user">
+
+
+
+                                    <div class="page-quick-sidemenu">
+
+
+
+                                        <a href="javascript:;" class="chat-sidebar-back-to-list">
+
+
+
+                                            <i class="fa fa-angle-double-left"></i>Back
+
+
+
+                                        </a>
+
+
+
+                                    </div>
+
+
+
+                                    <div class="chat-sidebar-chat-user-messages">
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <!-- End User Chat -->
+
+
+
+                        <!-- Start Setting Panel -->
+
+
+
+
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <!-- end chat sidebar -->
+
+
+
+        </div>
+
+
+
+        <!-- end page container -->
+
+
+
+        <!-- start footer -->
+
+
+
+        <div class="page-footer">
+
+
+
+            <div class="page-footer-inner"> 2021 &copy; PoCRA
+
+
+
+                <!--<a href="mailto:redstartheme@gmail.com" target="_top" class="makerCss">RedStar Theme</a>-->
+
+
+
+            </div>
+
+
+
+            <div class="scroll-to-top">
+
+
+
+                <i class="icon-arrow-up"></i>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <!-- end footer -->
+
+
+
+    </div>
+
+
+
+    <script>
+        dragElement(document.getElementById("mydiv"));
+
+
+
+        dragElement(document.getElementById("mydivmo"));
+
+
+
+        dragElement(document.getElementById("mydiva"));
+
+
+
+        dragElement(document.getElementById("mydivatt"));
+
+
+
+        dragElement(document.getElementById("mydivam"));
+
+
+
+        dragElement(document.getElementById("mydivattm"));
+
+
+
+        var coll = document.getElementsByClassName("collapsible");
+
+
+
+        var i;
+
+
+
+
+
+
+
+        for (i = 0; i < coll.length; i++) {
+
+
+
+            coll[i].addEventListener("click", function() {
+
+
+
+                this.classList.toggle("active");
+
+
+
+                var content = this.nextElementSibling;
+
+
+
+                if (content.style.maxHeight) {
+
+
+
+                    content.style.maxHeight = null;
+
+
+
+                } else {
+
+
+
+                    content.style.maxHeight = content.scrollHeight + "px";
+
+
+
+                }
+
+
+
+            });
+
+
+
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="assets/plugins/jquery/jquery.min.js"></script>
+
+
+
+
+
+
+
+    <script src="assets/plugins/popper/popper.min.js"></script>
+
+
+
+    <script src="assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
+
+
+
+    <script src="assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+
+
+
+    <!-- bootstrap -->
+
+
+
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+
+    <script src="assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+
+
+    <script src="assets/js/pages/sparkline/sparkline-data.js"></script>
+
+
+
+    <!-- Common js-->
+
+
+
+    <script src="assets/js/app.js"></script>
+
+
+
+    <script src="assets/js/layout.js"></script>
+
+
+
+    <script src="assets/js/theme-color.js"></script>
+
+
+
+    <!-- material -->
+
+
+
+    <script src="assets/plugins/material/material.min.js"></script>
+
+
+
+    <!-- animation -->
+
+
+
+    <script src="assets/js/pages/ui/animations.js"></script>
+
+
+
+
+
+
+
+    <!-- chart js -->
+
+
+
+    <script src="assets/plugins/chart-js/Chart.bundle.js"></script>
+
+
+
+    <script src="assets/plugins/chart-js/utils.js"></script>
+
+
+
+    <!-- <script src="assets/js/pages/chart/chartjs/home-data.js"></script> -->
+
+
+
+    <!-- summernote -->
+
+
+
+    <script src="assets/plugins/summernote/summernote.min.js"></script>
+
+
+
+    <script src="assets/js/pages/summernote/summernote-data.js"></script>
+
+
+
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap.min.css" />
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap.min.css" />
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+
+
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap.min.js"></script> -->
+
+
+
+    <!-- <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+
+
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+
+
+
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script> -->
+
+
+
+    <!-- <script src='https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js'></script> -->
+
+
+
+    <!--<script src="js/ol3-layerswitcher.js"></script>-->
+
+
+
+    <!-- Openlayers v6.3.1-->
+
+
+
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css">-->
+
+
+
+
+
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js"></script> -->
+
+
+
+
+
+
+
+    <!-- ol-layerswitcher -->
+
+
+
+    <script src="https://unpkg.com/ol-layerswitcher@3.5.0"></script>
+
+
+
+    <!--<link rel="stylesheet" href="https://unpkg.com/ol-layerswitcher@3.5.0/src/ol-layerswitcher.css" />-->
+
+
+
+    <script src="https://cdn.maptiler.com/ol-mapbox-style/v4.3.1/olms.js"></script>
+
+
+
+    <script src="js/custom.js"></script>
+
+
+
+</body>
+
+
+
+
+
+
+
+<!-- Mirrored from radixtouch.in/templates/admin/smile/source/layout_collapse.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Feb 2020 10:58:39 GMT -->
+
+
+
+
+
+
+
+</html>

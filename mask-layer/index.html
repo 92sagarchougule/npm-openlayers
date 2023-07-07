@@ -3,27 +3,43 @@
   <head>
     <meta charset="UTF-8">
 
-    <title>Layer Masking</title>
+    <title>IMD Advisory</title>
     <link rel="stylesheet" href="./style.css">
-    <!-- <style>
-      html, body {
-    margin: 0;
-    height: 100%;
-    }
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 100vw;
-      height: 100vh;
-      margin: 0;
-    }
-    </style> -->
+    <style>
+      .desk {
+            display: block;
+        }
+      #navbar{
+        background-color: green;
+      }
+    </style> 
     <link rel="stylesheet" href="node_modules/ol/ol.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     
   </head>
   <body>
-    <div id="map" class="map"></div>
+    
+
+    <div id="map" class="map">   
+
+      <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">IMD WEATHER ADVISORY</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <!-- <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li> -->
+          </ul>
+        </div>
+      </nav>
+      
+    </div>
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
     <script src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
     <script type="module" src="main.js"></script>

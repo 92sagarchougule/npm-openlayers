@@ -8,12 +8,17 @@ import {fromLonLat} from 'ol/proj.js';
 import {getVectorContext} from 'ol/render.js';
 import XYZ from 'ol/source/XYZ.js';
 import { transform } from 'ol/proj';
+import TileWMS from 'ol/source/TileWMS.js';
+import ScaleLine from 'ol/control/ScaleLine.js';
+import MousePosition from 'ol/control/MousePosition.js';
 
 
 
 
 
+// Services from Geoserver
 
+//http://localhost:8081/geoserver/ows?service=WFS&version=1.0.0&request=GetCapabilities                        Fetch all Layer list
 
 
 
@@ -31,18 +36,18 @@ const background =new TileLayer({
   }),
 });
 
-  const geoVector = new VectorLayer({     // to clip layer
-    style: null,
-    source: new VectorSource({
-      url: 'http://localhost:8081/geoserver/local/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=local%3ATaluka&maxFeatures=50&outputFormat=application%2Fjson',
-      format: new GeoJSON(),
-      crossOrigin: 'anonymous'
-    }),
-  });
+  // const geoVector = new VectorLayer({     // to clip layer
+  //   style: null,
+  //   source: new VectorSource({
+  //     url: 'http://localhost:8081/geoserver/local/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=local%3ATaluka&maxFeatures=50&outputFormat=application%2Fjson',
+  //     format: new GeoJSON(),
+  //     crossOrigin: 'anonymous'
+  //   }),
+  // });
 
 
 //http://localhost:8081/geoserver/local/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=local%3ATaluka&maxFeatures=50&outputFormat=application%2Fjson
-
+//http://20.219.130.223:8080/geoserver/potential_area/wms
 
 // const background = new TileLayer({
 //   className: 'stamen',
@@ -52,54 +57,60 @@ const background =new TileLayer({
 // });
 
 // geojson layer service from local server
+const Taluk_Geojson = new GeoJSON({
+})
 
-
+const potentialLayer = new TileLayer({
+  //extent: [-13884991, 2870341, -7455066, 6338219],
+  source: new TileWMS({
+    url: 'http://20.219.130.223:8080/geoserver/vector/wms',
+    params: {'LAYERS': '	vector:District'},
+    serverType: 'geoserver',
+    // Countries have transparency, so do not fade tiles:
+    transition: 0,
+  }),
+})
 
 const base = new TileLayer({
   source: new OSM(),
 });
 
-const clipLayer = new VectorLayer({     // to clip layer
-  style: null,
-  source: new VectorSource({
-    url: './data/map.geojson',
-    format: new GeoJSON(),
-  }),
-});
+// const clipLayer = new VectorLayer({     // to clip layer
+//   style: null,
+//   source: new VectorSource({
+//     url: './data/map.geojson',
+//     format: new GeoJSON(),
+//   }),
+// });
 
-//Giving the clipped layer an extent is necessary to avoid rendering when the feature is outside the viewport
-clipLayer.getSource().on('addfeature', function () {
-  background.setExtent(clipLayer.getSource().getExtent());   //
-});
+// //Giving the clipped layer an extent is necessary to avoid rendering when the feature is outside the viewport
+// clipLayer.getSource().on('addfeature', function () {
+//   potentialLayer.setExtent(clipLayer.getSource().getExtent());   //
+// });
 
+// const style = new Style({
+//   fill: new Fill({
+//     color: 'black',
+//   }),
+// });
 
-const style = new Style({
-  fill: new Fill({
-    color: 'black',
-  }),
-});
-
-
-background.on('postrender', function (e) {
-  const vectorContext = getVectorContext(e);
-  e.context.globalCompositeOperation = 'destination-in';
-  clipLayer.getSource().forEachFeature(function (feature) {
-    vectorContext.drawFeature(feature, style);
-  });
-  e.context.globalCompositeOperation = 'source-over';
-});
-
+// potentialLayer.on('postrender', function (e) {
+//   const vectorContext = getVectorContext(e);
+//   e.context.globalCompositeOperation = 'destination-in';
+//   clipLayer.getSource().forEachFeature(function (feature) {
+//     vectorContext.drawFeature(feature, style);
+//   });
+//   e.context.globalCompositeOperation = 'source-over';
+// });
 
 const map = new Map({
-  layers: [base, geoVector, background, clipLayer], //background,  
+  layers: [base, potentialLayer], //background,  geoVector
   target: 'map',
   view: new View({
-    center: fromLonLat([75.4924070208232, 19.631953861800696]),
+    center: fromLonLat([76.9160016321398, 18.476715747619593]),
     zoom: 7,
   }),
 });
-
-
 
 map.on('click', function(evt){
   var lonlat = transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
@@ -108,3 +119,23 @@ map.on('click', function(evt){
   var lat = lonlat[1];
   //alert("You clicked near lat lon: "+ lon.toFixed(6) + "  " + lat.toFixed(6));  // 831564965234.545288, 16.441194
 });
+
+function getTalukam(dtncode) {
+  var ele = document.getElementById("talukam");
+  ele.innerHTML = "<option value='-1'>--तालुका निवडा--</option>";
+  $.ajax({
+      url: "http://gis.mahapocra.gov.in/weatherservices/meta/dtaluka?dtncode=" + dtncode,
+      success: function(result) {
+          for (var i = 0; i < result.taluka.length; i++) {
+              ele.innerHTML = ele.innerHTML +
+                  '<option value="' + result.taluka[i]["thncode"] + '">' + result.taluka[i]["thnname"] + '</option>';
+          }
+      }
+  });
+}
+
+const scaleline = new ScaleLine({})
+const mousePosition = new MousePosition({})
+
+map.addControl(scaleline);
+map.addControl(mousePosition);
