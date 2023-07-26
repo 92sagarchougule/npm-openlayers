@@ -9,13 +9,14 @@ html, body {
   top: 20px;
   bottom: 0;
   width: 100vw;
-  height: 95vh;
+  height: 700px;
   margin: 0;
+  /* border: 2px black groove; */
 }
 
 .ol-mouse-position{
   background-color:white;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .d-head{
@@ -24,6 +25,19 @@ html, body {
   text-align: center;
 }
 
-
-
+.form{
+  position: fixed;
+  top: 750px;
+  left: 70px;
+  padding: 5px;
+  margin-top: 3px;
+  border: 3px solid #030303;
+  background-color: aliceblue;
+}
+.form select{
+  width:150px;
+}
+/* .dist-select{
+  overflow:hidden;
+} */
 
