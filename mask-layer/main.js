@@ -11,6 +11,7 @@ import { transform } from 'ol/proj';
 import TileWMS from 'ol/source/TileWMS.js';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import MousePosition from 'ol/control/MousePosition.js';
+import Zoom from 'ol/control/Zoom.js';
 
 
 
@@ -75,40 +76,40 @@ const base = new TileLayer({
   source: new OSM(),
 });
 
-// const clipLayer = new VectorLayer({     // to clip layer
-//   style: null,
-//   source: new VectorSource({
-//     url: './data/map.geojson',
-//     format: new GeoJSON(),
-//   }),
-// });
+const clipLayer = new VectorLayer({     // to clip layer
+  style: null,
+  source: new VectorSource({
+    url: './data/map.geojson',
+    format: new GeoJSON(),
+  }),
+});
 
-// //Giving the clipped layer an extent is necessary to avoid rendering when the feature is outside the viewport
-// clipLayer.getSource().on('addfeature', function () {
-//   potentialLayer.setExtent(clipLayer.getSource().getExtent());   //
-// });
+//Giving the clipped layer an extent is necessary to avoid rendering when the feature is outside the viewport
+clipLayer.getSource().on('addfeature', function () {
+  background.setExtent(clipLayer.getSource().getExtent());   //
+});
 
-// const style = new Style({
-//   fill: new Fill({
-//     color: 'black',
-//   }),
-// });
+const style = new Style({
+  fill: new Fill({
+    color: 'black',
+  }),
+});
 
-// potentialLayer.on('postrender', function (e) {
-//   const vectorContext = getVectorContext(e);
-//   e.context.globalCompositeOperation = 'destination-in';
-//   clipLayer.getSource().forEachFeature(function (feature) {
-//     vectorContext.drawFeature(feature, style);
-//   });
-//   e.context.globalCompositeOperation = 'source-over';
-// });
+background.on('postrender', function (e) {
+  const vectorContext = getVectorContext(e);
+  e.context.globalCompositeOperation = 'destination-in';
+  clipLayer.getSource().forEachFeature(function (feature) {
+    vectorContext.drawFeature(feature, style);
+  });
+  e.context.globalCompositeOperation = 'source-over';
+});
 
 const map = new Map({
-  layers: [base, potentialLayer], //background,  geoVector
+  layers: [ potentialLayer, background, clipLayer ], //background,  geoVector potentialLayer, base,
   target: 'map',
   view: new View({
-    center: fromLonLat([76.9160016321398, 18.476715747619593]),
-    zoom: 7,
+    center: fromLonLat([73.88926823370231, 18.471505663147724]),
+    zoom: 8,
   }),
 });
 
@@ -120,22 +121,29 @@ map.on('click', function(evt){
   //alert("You clicked near lat lon: "+ lon.toFixed(6) + "  " + lat.toFixed(6));  // 831564965234.545288, 16.441194
 });
 
-function getTalukam(dtncode) {
-  var ele = document.getElementById("talukam");
-  ele.innerHTML = "<option value='-1'>--तालुका निवडा--</option>";
-  $.ajax({
-      url: "http://gis.mahapocra.gov.in/weatherservices/meta/dtaluka?dtncode=" + dtncode,
-      success: function(result) {
-          for (var i = 0; i < result.taluka.length; i++) {
-              ele.innerHTML = ele.innerHTML +
-                  '<option value="' + result.taluka[i]["thncode"] + '">' + result.taluka[i]["thnname"] + '</option>';
-          }
-      }
-  });
-}
+// function getTalukam(dtncode) {
+//   var ele = document.getElementById("talukam");
+//   ele.innerHTML = "<option value='-1'>--तालुका निवडा--</option>";
+//   $.ajax({
+//       url: "http://gis.mahapocra.gov.in/weatherservices/meta/dtaluka?dtncode=" + dtncode,
+//       success: function(result) {
+//           for (var i = 0; i < result.taluka.length; i++) {
+//               ele.innerHTML = ele.innerHTML +
+//                   '<option value="' + result.taluka[i]["thncode"] + '">' + result.taluka[i]["thnname"] + '</option>';
+//           }
+//       }
+//   });
+// }
 
-const scaleline = new ScaleLine({})
-const mousePosition = new MousePosition({})
+const Mposi = new MousePosition({
+    prefix: 'You are here: ',
+    separator: ' | ',
+    numDigits: 5,
+    emptyString: 'Mouse is not over map.',
+    displayProjection: "EPSG:4326"
+});
 
-map.addControl(scaleline);
-map.addControl(mousePosition);
+const zoomContr = new Zoom({});
+map.addControl(new ScaleLine());
+map.addControl(Mposi);
+map.addControl(zoomContr);

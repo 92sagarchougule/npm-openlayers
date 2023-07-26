@@ -1,0 +1,29 @@
+@import "node_modules/ol/ol.css";
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+#map {
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  width: 100vw;
+  height: 95vh;
+  margin: 0;
+}
+
+.ol-mouse-position{
+  background-color:white;
+  font-size: 16px;
+}
+
+.d-head{
+  color: green;
+  border: 1px black groove;
+  text-align: center;
+}
+
+
+
+

@@ -162,7 +162,7 @@ map.on('click', function(event) {
       req_imd_Data.onload  = function() {
         var jsonResponse = JSON.parse(req_imd_Data.responseText);
         // do something with jsonResponse
-        console.log(jsonResponse);
+        //console.log(jsonResponse);
 
         //var tbl_Window = window.open("", "", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=50,width=600,height=600");
         //tbl_Window.document.write("<h2 style='color:green'><p> IMD Crop Advisory of  " + properties.dist_name + ''+ ' District</p></h2>');
@@ -172,7 +172,13 @@ map.on('click', function(event) {
         // No of crops : jsonResponse.length
         // Crop Name : jsonResponse[0].crop_name
 
-        forEach(jsonResponse)
+        
+
+        jsonResponse.forEach(myFunction);
+
+        function myFunction(item) {
+          console.log(jsonResponse[item].crop_name);
+        }
 
 
 
