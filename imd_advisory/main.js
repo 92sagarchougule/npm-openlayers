@@ -12,45 +12,47 @@ import TileWMS from 'ol/source/TileWMS.js';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import MousePosition from 'ol/control/MousePosition.js';
 import Zoom from 'ol/control/Zoom.js';
-import ZoomSlider from 'ol/control/ZoomSlider';
-import { Stroke } from 'ol/style.js';
-
-
-
-
-
-
-
+import {defaults} from 'ol/interaction';
 
 
 // const wmsSource = new TileWMS({
-//   url: 'https://ahocevar.com/geoserver/wms',
-//   params: {'LAYERS': 'ne:ne', 'TILED': true},
+//   url: 'http://20.219.130.223:8080/geoserver/vector/wms',
+//   params: {'LAYERS': 'vector:District', 'TILED': true},
 //   serverType: 'geoserver',
 //   crossOrigin: 'anonymous',
 // });
 
-
+const districtLayer = new TileLayer({
+  //extent: [-13884991, 2870341, -7455066, 6338219],
+  source: new TileWMS({
+    url: 'http://20.219.130.223:8080/geoserver/imd_advisory/wms',
+    params: {'LAYERS': '	vector:District', 'TILED': true},
+    serverType: 'geoserver',
+    crossOrigin: 'anonymous',
+    // Countries have transparency, so do not fade tiles:
+    transition: 0,
+  }),
+})
 
 
 //A distinct className is required to use another canvas for the background
 
-const key = "8H3vz4wO6mZAX9q3EEdG"
+// const key = "8H3vz4wO6mZAX9q3EEdG"
 
-const background =new TileLayer({   
-  className: 'ol-layer-imagery',
-  source: new XYZ({
-    //attributions:'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ',
-    url: 'https://api.maptiler.com/tiles/satellite/{z}/{x}/{y}.jpg?key=' + key,
+// const background =new TileLayer({   
+//   className: 'ol-layer-imagery',
+//   source: new XYZ({
+//     //attributions:'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ',
+//     url: 'https://api.maptiler.com/tiles/satellite/{z}/{x}/{y}.jpg?key=' + key,
     
-  }),
-});
+//   }),
+// });
 
             
-              //http://20.219.130.223:8080/geoserver/weather_services/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=District&outputFormat=application/json
+  //http://20.219.130.223:8080/geoserver/weather_services/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=District&outputFormat=application/json
 
 
-  var url = "http://20.219.130.223:8080/geoserver/weather_services/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=District&outputFormat=application/json";
+  var url = "http://20.219.130.223:8080/geoserver/imd_advisory/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Taluka&outputFormat=application/json";
 
 const geojson = new VectorLayer({
     title: "Taluka",
@@ -59,7 +61,6 @@ const geojson = new VectorLayer({
       format: new GeoJSON(),
     }),
 
-
     // style: new Style({
     //   fill: new Fill({
     //     color: 'red',
@@ -67,29 +68,11 @@ const geojson = new VectorLayer({
     //   stroke: new Stroke({
     //     color: 'white',
     //   }),
-    // }),
-
-
-
+    // })
   });
 
 
 
-
-
-
-
-// const districtLayer = new TileLayer({
-//   //extent: [-13884991, 2870341, -7455066, 6338219],
-//   source: new TileWMS({
-//     url: 'http://20.219.130.223:8080/geoserver/vector/wms',
-//     params: {'LAYERS': '	vector:District', 'TILED': true},
-//     serverType: 'geoserver',
-//     crossOrigin: 'anonymous',
-//     // Countries have transparency, so do not fade tiles:
-//     transition: 0,
-//   }),
-// })
 
 const base = new TileLayer({
   source: new OSM(),
@@ -98,9 +81,10 @@ const base = new TileLayer({
 const map = new Map({
   layers: [base], //background,  geoVector potentialLayer, base, , potentialLayer, districtLayer
   target: 'map',
+  interactions:defaults({mouseWheelZoom:false}),
   view: new View({
     center: fromLonLat([76.40872909324703, 18.892120644156023]),
-    zoom: 7.4,
+    zoom: 7.1,
   }),
 });
 
@@ -115,15 +99,14 @@ const mPos = new MousePosition({
   //placeholder:'down-left'
 });
 
-    
 
 
 
-map.addControl(new ScaleLine());
-map.addControl(new Zoom());
-//map.addControl(new ZoomSlider());
-map.addControl(mPos);
-map.addLayer(geojson);
+
+
+
+
+//Map Onclick Function
 
 map.on('click', function(event) {
   // Get the clicked coordinate
@@ -137,24 +120,13 @@ map.on('click', function(event) {
     // Get the properties of the first feature
     var properties = features[0].getProperties();
 
+    var name = "District : " + properties.dist_name + " " + "Taluka : " + properties.tah_name ;
 
-    document.getElementById("District").innerHTML = properties.dist_code;
 
-    
-    //alert('District Code : ' + properties.dist_code + ' | ' +' District Name : ' +properties.dist_name);
+    document.getElementById("District").innerHTML = name;
 
-    // var requestOptions = {
-    //   method: 'GET',
-    //   redirect: 'follow'
-    // };
-    // const imd_Data = fetch("http://uatapi_mat.mahaitgov.in/district_advisory_data/"+ properties.dist_code , requestOptions)
-    //   .then(response => response.json())
-    //   .then(result => result)
-    //   .catch(error => console.log('error', error));
-    // const apiData = imd_Data;
-    //console.log(imd_Data); 
 
-    const url = "http://uatapi_mat.mahaitgov.in/district_advisory_data/"+ properties.dist_code
+    const url = "http://uatapi_mat.mahaitgov.in/district_advisory_data/"+ properties.tah_code ;
 
       var req_imd_Data = new XMLHttpRequest();
       req_imd_Data.overrideMimeType("application/json");
@@ -162,43 +134,46 @@ map.on('click', function(event) {
       req_imd_Data.onload  = function() {
         var jsonResponse = JSON.parse(req_imd_Data.responseText);
         // do something with jsonResponse
-        //console.log(jsonResponse);
-
-        //var tbl_Window = window.open("", "", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=50,width=600,height=600");
-        //tbl_Window.document.write("<h2 style='color:green'><p> IMD Crop Advisory of  " + properties.dist_name + ''+ ' District</p></h2>');
-        //tbl_Window.document.write("<h2 style='color:green'><p> IMD Crop Advisory of  " + properties.dist_name + ''+ ' District</p></h2>');
-
-        //Date :   jsonResponse[0].custom_date
-        // No of crops : jsonResponse.length
-        // Crop Name : jsonResponse[0].crop_name
-
-        
+        console.log(jsonResponse);
 
         jsonResponse.forEach(myFunction);
 
         function myFunction(item) {
-          console.log(jsonResponse[item].crop_name);
+          //console.log(jsonResponse[item].crop_name);
         }
-
-
-
-
-
-        
       };
       req_imd_Data.send(null);
-
-      
-
-
 
   }
   // else{
   //   document.getElementById("District").innerHTML = 'Please click inside of Maharashtra state boundary';
   // }
 
-
- 
-  
-
 });
+
+
+map.addLayer(geojson);
+map.addLayer(districtLayer);
+
+map.addControl(new ScaleLine());
+map.addControl(new Zoom());
+//map.addControl(new ZoomSlider());
+map.addControl(mPos);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
