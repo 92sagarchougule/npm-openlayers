@@ -13,6 +13,20 @@ import ScaleLine from 'ol/control/ScaleLine.js';
 import MousePosition from 'ol/control/MousePosition.js';
 import Zoom from 'ol/control/Zoom.js';
 import {defaults} from 'ol/interaction';
+import Overlay from 'ol/Overlay';
+
+
+document.onreadystatechange = function () {
+  if (document.readyState !== "complete") {
+     document.querySelector("body").style.visibility = "hidden";
+     document.getElementById("loading_indicator").style.visibility = "visible";
+  } else {
+     setTimeout(() => {
+        document.getElementById("loading_indicator").style.display ="none";
+        document.querySelector("body").style.visibility = "visible";
+     }, 3000)
+  }
+};
 
 
 // const wmsSource = new TileWMS({
@@ -51,6 +65,11 @@ const districtLayer = new TileLayer({
             
   //http://20.219.130.223:8080/geoserver/weather_services/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=District&outputFormat=application/json
 
+  // ----------------- Attribute List ------------------------------------------------
+  //"http://20.219.130.223:8080/geoserver/wfs?version=1.3.0&request=describeFeatureType&outputFormat=application/json&service=WFS&typeName=District"
+
+  //
+
 
   var url = "http://20.219.130.223:8080/geoserver/imd_advisory/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Taluka&outputFormat=application/json";
 
@@ -70,6 +89,28 @@ const geojson = new VectorLayer({
     //   }),
     // })
   });
+
+
+  var distAttLayer = "http://20.219.130.223:8080/geoserver/wfs?version=1.3.0&request=describeFeatureType&outputFormat=application/json&service=WFS&typeName=District"
+
+  var req_imd_Data = new XMLHttpRequest();
+      req_imd_Data.overrideMimeType("application/json");
+      req_imd_Data.open('GET', distAttLayer, true);
+      req_imd_Data.onload  = function() {
+        var jsonResponse = JSON.parse(req_imd_Data.responseText);
+        // do something with jsonResponse
+        //console.log(jsonResponse);
+
+
+        // jsonResponse.forEachorEach(myFunction(evt){
+        //   console.log(evt);
+        // });
+
+        function myFunction(item) {
+          console.log(jsonResponse[item]);
+        }
+      };
+      req_imd_Data.send(null);
 
 
 
@@ -118,12 +159,18 @@ map.on('click', function(event) {
   // If features are found at the clicked coordinate
   if (features && features.length > 0) {
     // Get the properties of the first feature
-    var properties = features[0].getProperties();
 
-    var name = "District : " + properties.dist_name + " " + "Taluka : " + properties.tah_name ;
+    let properties = features[0].getProperties();
+
+    //var name = "District : <b>" + properties.dist_name + "</b> / " + "Taluka : <b> " + properties.tah_name +"<b/>";
+
+    let name = "<table> <tr> <th> District </th> " + "<th>Taluka</th> </tr> "+ "<tr><td><b>"+properties.dist_name + "</b></td>  "  + "<td><b>"+properties.tah_name +"</b> </td></tr> <table>";
 
 
-    document.getElementById("District").innerHTML = name;
+
+    //document.getElementById("District").innerHTML = name;
+
+    // ------------------------------------------- API from Database----------------------------------------------
 
 
     const url = "http://uatapi_mat.mahaitgov.in/district_advisory_data/"+ properties.tah_code ;
@@ -134,7 +181,7 @@ map.on('click', function(event) {
       req_imd_Data.onload  = function() {
         var jsonResponse = JSON.parse(req_imd_Data.responseText);
         // do something with jsonResponse
-        console.log(jsonResponse);
+        //console.log(jsonResponse);
 
         jsonResponse.forEach(myFunction);
 
@@ -144,12 +191,56 @@ map.on('click', function(event) {
       };
       req_imd_Data.send(null);
 
+      // -----------------------------------------------------------------------------------------------------------
+
+
+
+      var content = document.getElementById('popup')
+
+      var popup = new Overlay({
+        element: content
+      });
+
+      var coor = event.coordinate
+
+      popup.setPosition(coor);
+
+      map.addOverlay(popup);
+
+      
+      content.innerHTML = name;
+
   }
   // else{
   //   document.getElementById("District").innerHTML = 'Please click inside of Maharashtra state boundary';
   // }
 
 });
+
+// ---------------------------------------------- Feature List --------------------------------------------------------
+
+    // var FcLayer = "http://20.219.130.223:8080/geoserver/imd_advisory/wms?request=GetCapabilities&service=WMS&version=1.3.0";
+
+    // var req_imd_Data = new XMLHttpRequest();
+    //   req_imd_Data.overrideMimeType("application/json");
+    //   req_imd_Data.open('GET', FcLayer, true);
+    //   req_imd_Data.onload  = function() {
+    //     var jsonResponse = JSON.parse(req_imd_Data.text);
+    //     // do something with jsonResponse
+    //     console.log(jsonResponse);
+
+    //     jsonResponse.forEach(myFunction);
+
+    //     function myFunction(item) {
+    //       //console.log(jsonResponse[item].crop_name);
+    //     }
+    //   };
+    //   req_imd_Data.send(null);
+
+
+
+
+
 
 
 map.addLayer(geojson);

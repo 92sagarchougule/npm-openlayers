@@ -4,6 +4,30 @@ html, body {
   margin: 0;
   height: 100%;
 }
+
+
+/* -----------------------------------------------------loading page----------------------------------------- */
+#loading_indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 10px solid rgb(108, 218, 58);
+  border-radius: 50%;
+  border-top: 10px solid rgb(255, 0, 0);
+  width: 100px;
+  height: 100px;
+  animation: spinIndicator 1s linear infinite;
+}
+@keyframes spinIndicator {
+  100% {
+     transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------map---------------------------------------------------- */
 #map {
   position: absolute;
   top: 20px;
@@ -37,7 +61,35 @@ html, body {
 .form select{
   width:150px;
 }
-/* .dist-select{
-  overflow:hidden;
-} */
 
+
+/*-------------------------------------------------------- Popup Table------------------------------------------------------- CSS */
+table{
+  border-spacing: 1em 0.5em;
+  padding: 0 2em 1em 0;
+  border: 2px rgb(7, 7, 7) groove;
+  background-color: rgb(14, 221, 221);
+}
+
+th{
+  padding: 15px;
+  text-align: left;
+  border: 2px rgb(7, 7, 7) groove;
+  background-color: rgb(14, 221, 221);
+  padding: 10px 0;
+}
+
+td {
+  width: 40px;
+  height: 40px;
+  padding: 40px;
+  background-color: rgb(14, 221, 221);
+  border: 2px rgb(7, 7, 7) groove;
+  text-align: center;
+  vertical-align: middle;
+}
+/* ----------------------------------------------------------- -----------------                        ----------------------------- */
+
+.form div{
+  display: inline-block;
+}
