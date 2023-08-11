@@ -1,0 +1,144 @@
+@import "node_modules/ol/ol.css";
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+
+/* -----------------------------------------------------loading page----------------------------------------- */
+#loading_indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 10px solid rgb(108, 218, 58);
+  border-radius: 50%;
+  border-top: 10px solid rgb(255, 255, 255);
+  width: 100px;
+  height: 100px;
+  animation: spinIndicator 1s linear infinite;
+}
+@keyframes spinIndicator {
+  100% {
+     transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------map---------------------------------------------------- */
+#map {
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  /* border: 2px black groove; */
+}
+
+
+
+.d-head{
+  color: green;
+  border: 1px black groove;
+  text-align: center;
+}
+
+.form div{
+  display: inline-block;
+  margin-left: 2px;
+  padding: 1px;
+  align-items: center;
+}
+
+.form{
+  position: fixed;
+  top: 60px;
+  left: 40px;
+  padding: 1px;
+  margin-top: 2px;
+  border: 2px solid #030303;
+  background-color: rgb(248, 249, 250);
+  align-items: center;
+}
+.form select{
+  width:100px;
+  align-items: center;
+}
+
+/* button{
+  position: fixed;
+  top: 150px;
+  left: 40px;
+} */
+
+/*-------------------------------------------------------- Popup Table------------------------------------------------------- CSS */
+table{
+  border-spacing: 1em 0.5em;
+  padding: 0 2em 1em 0;
+  border: 2px rgb(7, 7, 7) groove;
+  background-color: rgb(14, 221, 221);
+}
+
+th{
+  padding: 15px;
+  text-align: left;
+  border: 2px rgb(7, 7, 7) groove;
+  background-color: rgb(14, 221, 221);
+  padding: 10px 0;
+}
+
+td {
+  width: 40px;
+  height: 40px;
+  padding: 40px;
+  background-color: rgb(14, 221, 221);
+  border: 2px rgb(7, 7, 7) groove;
+  text-align: center;
+  vertical-align: middle;
+}
+/* ----------------------------------------------------------- -----------------                        ----------------------------- */
+
+
+
+/* -------------- Popup----------------------------------- */
+#popup{
+  background-color: rgb(199, 247, 69);
+  border: 2px black dashed;
+  margin: 5px;
+  padding: 5px;
+}
+
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+}
+.ol-popup-closer:after {
+  content: "✖";
+}
+
+#legend{
+  position: fixed;
+  bottom: 50px;
+  right: 40px;
+  border: 2px green groove;
+  background-color: azure;
+  padding: 10px;
+
+}
+
+/* #mouse-position{
+  left: 400px;
+  top: 100px;
+} */
+
+.MousePosition {
+  /* Your custom styles here */
+  left: 400px;
+  top: 100px;
+  background: #bb0808;
+}

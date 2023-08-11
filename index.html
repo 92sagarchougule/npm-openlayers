@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <title>CROP-SAP</title>
+    
+    <style>
+      .desk {
+            display: block;
+        }
+      #navbar{
+        background-color: rgb(198, 233, 198);
+      }
+      .active{
+        background-color: white;
+      }
+      .title-imd{
+        text-align: center;
+        font-size: 26px;
+        
+      }
+    </style> 
+    <link rel="stylesheet" href="style.css">
+    <script type = "module" src="main.js"></script>
+  
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+    
+
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+
+    
+
+
+    <!-- from pocra code -->
+
+    <!-- <link type="text/css" rel="stylesheet" href="css/ol.css" /> -->
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/ol3-layerswitcher.css" />
+    <script src="libs/v6.0.0-dist/ol.js"></script>
+    <link rel="stylesheet" href="libs/v6.0.0-dist/ol.css">
+
+    
+    
+  </head>
+  <body>
+
+    <div id = "loading_indicator"> </div>
+    <span id="popup"></span>
+
+
+      <!-- map div -->
+
+    <span id="popup"></span>
+    <div id="map" class="map">  
+      <div id="mouse-position"></div> 
+
+      <div id="info">&nbsp;</div>
+
+
+      <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+        <div class="container-fluid">
+
+          <div class="navbar-header">
+            <img src="./data/images/mahait-logo.jpeg"  alt="mahait-logo" style="width:50px;height:50px;">
+          </div>
+
+          <ul class="nav navbar-nav">
+            <!-- <li class="active"><a href="http://uat_mat.mahaitgov.in/#modules"> Home </a></li> -->
+            
+            <li class="title-imd"> <a href="#"> <b>        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CROP-SAP     </b> </a></li> 
+
+            <!-- <li id="District" class="title-imd" style="text-align: center text-font = size 10%"> <a href="#"> <b>         District     </b> </a></li>  -->
+            <!-- <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li> -->
+          </ul>
+                    
+        </div>
+      </nav>
+
+    </div>
+
+
+
+    <!-- after map div -->
+    <!-- <form class="form"> -->
+    <div class="form">
+
+    <div class="division-select">
+        <label for="division"> Select Division : 
+        <select name="division" id="division">
+          <option value="Amravati">Amravati</option>
+          <option value="Aurangabad">Aurangabad</option>
+          <option value="Kolhapur">Kolhapur</option>
+          <option value="Konkan">Konkan</option>
+          <option value="Latur">Latur</option>
+          <option value="Nagpur">Nagpur</option>
+          <option value="Nashik">Nashik</option>
+          <option value="Pune">Pune</option>
+        </label>
+        </select>
+    </div>
+
+
+      <div class="district-select">
+        <label for="district"> Select District : 
+        <select name="district" id="district">
+          
+        </label>
+        </select>
+    </div>
+          
+        <div class="taluk-select">
+            <label for="taluka"> Select Taluka : 
+            <select name="Taluka" id="taluka">
+              
+            </label>
+            </select>
+        </div>
+
+        <div class="crop-select">
+          <label for="crop"> Select Crop : 
+          <select name="crop_name" id = "crop_name"> Select Crop
+            <!-- <option value="SUNFLOWER">SUNFLOWER</option>
+            <option value="MAIZE">MAIZE</option>
+            <option value="CUSTARD APPLE">CUSTARD APPLE</option>
+            <option value="MOTH BEAN">MOTH BEAN</option>
+            <option value="BANANA">BANANA</option>
+            <option value="SORGHUM (JOWAR/GREAT MILLET)">SORGHUM (JOWAR/GREAT MILLET)</option>
+            <option value="SAPOTA">SAPOTA</option>
+            <option value="FINGER MILLET">FINGER MILLET</option>
+            <option value="AGRI FIELD">AGRI FIELD</option>
+            <option value="CHICKEN">CHICKEN</option>
+            <option value="GINGER">GINGER</option>
+            <option value="BIRD">BIRD</option>
+            <option value="ORANGE">ORANGE</option>
+            <option value="GUAVA">GUAVA</option>
+            <option value="NIGER">NIGER</option>
+            <option value="ONION">ONION</option>
+            <option value="OKRA/ LADYFINGER">OKRA/ LADYFINGER</option>
+            <option value="TOMATO">TOMATO</option>
+            <option value="SOYABEAN">SOYABEAN</option>
+            <option value="GRAPES">GRAPES</option>
+            <option value="BUFFALO">BUFFALO</option>
+            <option value="POMEGRANATE">POMEGRANATE</option>
+            <option value="FODDER MAIZE">FODDER MAIZE</option>
+            <option value="BOTTLE GOURD">BOTTLE GOURD</option>
+            <option value="PAPAYA">PAPAYA</option>
+            <option value="ARECANUT">ARECANUT</option>
+            <option value="SOIL TESTING">SOIL TESTING</option>
+            <option value="SUGARCANE">SUGARCANE</option>
+            <option value="MANGO">MANGO</option>
+            <option value="VEGETABLE CORIANDER">VEGETABLE CORIANDER</option>
+            <option value="LAND PREPARATION">LAND PREPARATION</option>
+            <option value="SESAME (GINGELLY/TIL)">SESAME (GINGELLY/TIL)</option>
+            <option value="GROUNDNUT">GROUNDNUT</option>
+            <option value="PLANT PROTECTION">PLANT PROTECTION</option>
+            <option value="CHILLI">CHILLI</option>
+            <option value="VEGETABLE CHILLI">VEGETABLE CHILLI</option>
+            <option value="SWEET ORANGE">SWEET ORANGE</option>
+            <option value="GREEN GRAM">GREEN GRAM</option>
+            <option value="PIGEON PEA (RED GRAM/ARHAR)">PIGEON PEA (RED GRAM/ARHAR)</option>
+            <option value="TURMERIC">TURMERIC</option>
+            <option value="BLACK GRAM">BLACK GRAM</option>
+            <option value="CHICK">CHICK</option>
+            <option value="MULBERRY">MULBERRY</option>
+            <option value="MANDARIN ORANGE">MANDARIN ORANGE</option>
+            <option value="PEARL MILLET">PEARL MILLET</option>
+            <option value="BITTER GOURD">BITTER GOURD</option>
+            <option value="BRINJAL">BRINJAL</option>
+            <option value="RICE">RICE</option>
+            <option value="COTTON">COTTON</option>
+            <option value="LITTLE MILLET (KUTKI)">LITTLE MILLET (KUTKI)</option>
+            <option value="GENERAL ADVICE">GENERAL ADVICE</option>
+            <option value="CASHEW">CASHEW</option>
+            <option value="COW">COW</option>
+            <option value="LEMON">LEMON</option>
+            <option value="COCONUT">COCONUT</option>
+            <option value="GOAT">GOAT</option> -->
+          </label>
+          </select>
+        </div> 
+
+
+        <div class="from-date" >
+          <label for="from-date">From Date: 
+          <input type="date" id="from-date" min='2023-07-01'>
+        </label>
+        </div>
+
+
+        <div class="to-date" >
+          <label for="to-date" >To Date: 
+            <!-- " -->
+          <input type="date" id="to-date" max="@DateTime.Now.ToString('yyyy-MM-dd')">
+        </label>
+        </div>
+      
+        <div class="submit" >
+          <button id="submit"> Submit </button>  
+          <button id="clear"> Clear </button>
+          <!-- onclick="handleButtonClick()" -->
+        </div>
+
+        <div id="legend"></div>
+
+      </div>
+      
+    <!-- </form> -->
+
+
+    <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
+  </body>
+</html>
