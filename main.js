@@ -62,7 +62,7 @@ document.onreadystatechange = function () {
 
 // ------------zoom Feature--------------------------------------------------------------
 
-    // let url = "http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" +taluka_zoom+ "&outputFormat=application/json";  //"tah_name='Ausa'"
+    // let url = "http:///geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" +taluka_zoom+ "&outputFormat=application/json";  //"tah_name='Ausa'"
 
 
     // // Assuming you have defined the variables 'cropsap' and 'topo' elsewhere
@@ -113,7 +113,7 @@ document.onreadystatechange = function () {
     //   );
     // });
 
-    let url = "http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" + taluka_zoom + "&outputFormat=application/json";
+    let url = "http:///geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" + taluka_zoom + "&outputFormat=application/json";
 
 // Assuming you have defined the variables 'cropsap' and 'topo' elsewhere
 
@@ -209,7 +209,7 @@ map.addLayer(geojson);
     var cropsap = new ol.layer.Tile({
       title: "CropSap",
       source: new ol.source.TileWMS({
-        url: "http://20.219.130.223:8080/geoserver/cropsap/wms",
+        url: "http:///geoserver/cropsap/wms",
         crossOrigin: "Anonymous",
         serverType: "geoserver",
         visible: true,
@@ -225,8 +225,9 @@ map.addLayer(geojson);
 // Onclick Attribute------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //let tal = "taluka='Georai'"
-    //http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap_view&CQL_FILTER=taluka=%27Nevasa%27&outputFormat=application/json
-    const cropsap_json = "http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'cropsap_view' + "&CQL_FILTER=" + params_geoserver1 + "&outputFormat=application/json";
+    //http://
+    /geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap_view&CQL_FILTER=taluka=%27Nevasa%27&outputFormat=application/json
+    const cropsap_json = "http:///geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'cropsap_view' + "&CQL_FILTER=" + params_geoserver1 + "&outputFormat=application/json";
 
     const vectorSource = new ol.source.Vector({
       format: new ol.format.GeoJSON(),
@@ -256,7 +257,7 @@ map.addLayer(geojson);
       var districtLayer = new ol.layer.Tile({
           title: "District",
           source: new ol.source.TileWMS({
-            url: "http://20.219.130.223:8080/geoserver/vector/wms",
+            url: "http:///geoserver/vector/wms",
             crossOrigin: "Anonymous",
             serverType: "geoserver",
             visible: true,
@@ -294,7 +295,7 @@ map.addLayer(geojson);
     //     redirect: 'follow'
     //   };
 
-    //   fetch("http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap%3Acropsap_view&maxFeatures=50&outputFormat=application%2Fjson", requestOptions)
+    //   fetch("http:///geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap%3Acropsap_view&maxFeatures=50&outputFormat=application%2Fjson", requestOptions)
     //   .then(response => {
     //     // Check if the response is successful
     //     if (!response.ok) {
@@ -347,7 +348,7 @@ map.addLayer(geojson);
       redirect: 'follow'
     };
   
-    fetch("http://20.219.130.223:8080/geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap%3Acropsap_view&maxFeatures=50&outputFormat=application%2Fjson", requestOptions)
+    fetch("http:///geoserver/cropsap/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cropsap%3Acropsap_view&maxFeatures=50&outputFormat=application%2Fjson", requestOptions)
     .then(response => {
       // Check if the response is successful
       if (!response.ok) {
@@ -386,7 +387,7 @@ map.addLayer(geojson);
 // Legend-----------------------------------------------------------------------------------------------
 
         var legend_crop = document.getElementById("legend");
-        let Legend_url = "http://20.219.130.223:8080/geoserver/cropsap/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=cropsap:cropsap_view";
+        let Legend_url = "http:///geoserver/cropsap/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=cropsap:cropsap_view";
         var imagem = document.createElement("img");
         imagem.src = Legend_url;
         //legend_crop.appendChild(<h3>Legend :</h3>);
@@ -553,7 +554,7 @@ document.getElementById('division').onchange = function(){
 
   console.log( division_value);
 
-  let divison_json = "http://20.219.130.223:8080/geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Agri_Division_boundary' + "&CQL_FILTER=" +division_value+ "&outputFormat=application/json";
+  let divison_json = "http:///geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Agri_Division_boundary' + "&CQL_FILTER=" +division_value+ "&outputFormat=application/json";
 
   divison_geojson = new ol.layer.Vector({
     title: 'cropsap',
@@ -681,7 +682,7 @@ document.getElementById('district').onchange = function(){
 
   console.log( district_value);
 
-  let district_json = "http://20.219.130.223:8080/geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'District' + "&CQL_FILTER=" +district_value+ "&outputFormat=application/json";
+  let district_json = "http:///geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'District' + "&CQL_FILTER=" +district_value+ "&outputFormat=application/json";
 
   district_geojson = new ol.layer.Vector({
     title: 'cropsap',
@@ -814,7 +815,7 @@ document.getElementById('taluka').onchange = function(){
 
   console.log( taluka_value);
 
-  let taluka_json = "http://20.219.130.223:8080/geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" +taluka_value+ "&outputFormat=application/json";
+  let taluka_json = "http:///geoserver/vector/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + 'Taluka' + "&CQL_FILTER=" +taluka_value+ "&outputFormat=application/json";
 
   taluka_geojson = new ol.layer.Vector({
     title: 'cropsap',
