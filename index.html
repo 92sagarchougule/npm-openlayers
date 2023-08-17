@@ -22,7 +22,11 @@
       }
     </style> 
     <link rel="stylesheet" href="style.css">
+    <script src="other.js"></script>
     <script type = "module" src="main.js"></script>
+    
+
+    
   
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -53,7 +57,14 @@
   <body>
 
     <div id = "loading_indicator"> </div>
-    <span id="popup"></span>
+
+
+    <div id="popup" class="ol-popup" style="z-index: 500">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <span id="popup-content"></span>
+  </div>
+
+    <!-- <span id="popup"></span> -->
 
 
       <!-- map div -->
@@ -61,6 +72,7 @@
     <span id="popup"></span>
     <div id="map" class="map">  
       <div id="mouse-position"></div> 
+
 
       <div id="info">&nbsp;</div>
 
@@ -94,40 +106,45 @@
     <div class="form">
 
     <div class="division-select">
-        <label for="division"> Select Division : 
+        <!-- <label for="division"> Select Division :  -->
         <select name="division" id="division">
-          <option value="Amravati">Amravati</option>
-          <option value="Aurangabad">Aurangabad</option>
-          <option value="Kolhapur">Kolhapur</option>
-          <option value="Konkan">Konkan</option>
-          <option value="Latur">Latur</option>
-          <option value="Nagpur">Nagpur</option>
-          <option value="Nashik">Nashik</option>
-          <option value="Pune">Pune</option>
-        </label>
+          <option value="">Select Division</option>
+          <option value="07">Amravati</option>
+          <option value="05">Aurangabad</option>
+          <option value="04">Kolhapur</option>
+          <option value="01">Konkan</option>
+          <option value="06">Latur</option>
+          <option value="08">Nagpur</option>
+          <option value="02">Nashik</option>
+          <option value="03">Pune</option>
+        <!-- </label> -->
         </select>
     </div>
 
 
       <div class="district-select">
-        <label for="district"> Select District : 
+        <!-- <label for="district"> Select District :  -->
         <select name="district" id="district">
-          
-        </label>
+          <option value="">Select District</option>         
+        <!-- </label> -->
         </select>
     </div>
           
         <div class="taluk-select">
-            <label for="taluka"> Select Taluka : 
+            <!-- <label for="taluka"> Select Taluka :  -->
             <select name="Taluka" id="taluka">
+
+              <option value="">Select Taluka</option> 
               
-            </label>
+            <!-- </label> -->
             </select>
         </div>
 
         <div class="crop-select">
-          <label for="crop"> Select Crop : 
-          <select name="crop_name" id = "crop_name"> Select Crop
+          <!-- <label for="crop"> Select Crop :  -->
+          <select name="crop_name" id = "crop_name"> 
+
+            <option value="">Select Crop</option> 
             <!-- <option value="SUNFLOWER">SUNFLOWER</option>
             <option value="MAIZE">MAIZE</option>
             <option value="CUSTARD APPLE">CUSTARD APPLE</option>
@@ -184,7 +201,7 @@
             <option value="LEMON">LEMON</option>
             <option value="COCONUT">COCONUT</option>
             <option value="GOAT">GOAT</option> -->
-          </label>
+          <!-- </label> -->
           </select>
         </div> 
 
@@ -199,13 +216,16 @@
         <div class="to-date" >
           <label for="to-date" >To Date: 
             <!-- " -->
-          <input type="date" id="to-date" max="@DateTime.Now.ToString('yyyy-MM-dd')">
+          <input type="date" id="dateInput" name="dateInput">
         </label>
         </div>
       
         <div class="submit" >
           <button id="submit"> Submit </button>  
+          
           <button id="clear"> Clear </button>
+
+          <button id="print-button"> Print Map </button>
           <!-- onclick="handleButtonClick()" -->
         </div>
 
@@ -215,7 +235,9 @@
       
     <!-- </form> -->
 
+    
 
+    <script src="print.js"></script>
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
   </body>
 </html>
